@@ -1,0 +1,38 @@
+package com.team5.librarymanager.service;
+
+import com.team5.librarymanager.entity.Category;
+import com.team5.librarymanager.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class CategoryService {
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
+    }
+
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
+    }
+
+    public Category save(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
+
+    public Long count() {
+        return categoryRepository.count();
+    }
+
+    public void saveAll(List<Category> list) {
+        categoryRepository.saveAll(list);
+    }
+}
