@@ -32,6 +32,9 @@ public class Book {
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;
 
+    @Column(name = "Status", nullable = false)
+    private boolean status;
+
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Loan> loans;
 
@@ -40,7 +43,8 @@ public class Book {
 
     // Getters, setters, constructors
     public Book() {}
-    public Book(String title, String author, String publisher, Integer year, Category category, Integer quantity) {
+    public Book(String title, String author, String publisher, Integer year, Category category, Integer quantity,
+                boolean status) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
@@ -48,6 +52,7 @@ public class Book {
         this.category = category;
         this.quantity = quantity;
         this.createdAt = LocalDateTime.now();
+        this.status = status;
     }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -65,4 +70,12 @@ public class Book {
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-} 
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+}

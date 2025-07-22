@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${formMode == 'edit'} ? 'Edit User' : 'Add New User'">User Form</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+  <div>
+    <div>
+      <div>
+        <h1 th:text="${formMode == 'edit'} ? 'Edit User' : 'Add New User'">Edit User | Add New User</h1>
+
+        <form th:action="@{'/users/save'}" method="POST" th:object="${user}">
+          <input type="hidden" th:field="*{id}" />
+
+          <div>
+            <label for="fullname">Full name:</label>
+            <input type="text" id="fullname" th:field="*{fullName}"
+                   required/>
+            <span th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Full name is required!</span>
+          </div>
+
+          <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" th:field="*{username}"/>
+              <span th:if="${duplicated}" th:text="${duplicated}" style="color: red;"></span>
+          </div>
+
+            <div>
+                <label for="password">Password:</label>
+                <input type="text" id="password" th:field="*{password}"/>
+            </div>
+
+            <div>
+                <label for="role">Role:</label>
+                <select id="role" th:field="*{role}">
+                    <option value="staff">Staff</option>
+                    <option value="member">Member</option>
+                </select>
+            </div>
+
+          <div>
+            <label for="status">Status:</label>
+            <select id="status" th:field="*{status}">
+              <option value="true">Active (true)</option>
+              <option value="false">Inactive (false)</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" th:text="${formMode == 'edit'} ? 'Update' : 'Create'">Submit</button>
+            <a href="/categories" th:text="${formMode == 'edit'} ? 'Cancel' : 'Cancel'">Cancel</a>
+          </div>
+
+          <div>
+            <input type="hidden" name="formMode" th:value="${formMode}">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

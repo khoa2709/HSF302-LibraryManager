@@ -1,5 +1,6 @@
 package com.team5.librarymanager.controller;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import com.team5.librarymanager.entity.User;
 import com.team5.librarymanager.service.BookService;
 import com.team5.librarymanager.service.CategoryService;
@@ -22,16 +23,23 @@ public class BookController {
     @GetMapping("/books")
     public String showBooks(@RequestParam(value = "keyword", required = false, defaultValue = "") String kw, Model model, HttpSession session ) {
 
-        if (!kw.equals("")) {
-            model.addAttribute("books", bookService.searchBooks(kw));
-        }else {
-            model.addAttribute("books", bookService.findAll());
-        }
-
         User account = (User) session.getAttribute("loggedInUser");
         if (account == null) {
             return "redirect:/login";
         }
+         if (account.getRole().equals("admin")) {
+             if (kw.equals("")) {
+                 model.addAttribute("books", bookService.findAll());
+             } else {
+                 model.addAttribute("books", bookService.searchBooks(kw));
+             }
+         } else {
+             if(kw.equals("")) {
+                 model.addAttribute("books", bookService.findActiveBooks());
+             } else {
+                 model.addAttribute("books", bookService.searchActiveBooks(kw));
+             }
+         }
         return "books";
     }
 

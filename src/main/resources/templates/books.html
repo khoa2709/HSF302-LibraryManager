@@ -5,16 +5,21 @@
   <title>List of books</title>
 </head>
 <body>
-  <h1>Sách</h1>
+  <h1>Book Management</h1>
+  <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+      <a th:href="@{'/books'}">Manage Books</a>
+    <a th:href="@{'/categories'}">Manage Categories</a>
+      <a th:href="@{'/users'}">Manage Users</a>
+  </div>
   <p>
     <form th:action="@{'/books'}" method="get">
         <label for="keyword">Keyword: </label>
-        <input id="keyword" name="keyword" type="text" placeholder="Hãy nhập tên sách">
+        <input id="keyword" name="keyword" type="text" placeholder="Input name of book">
         <button type="submit">Search</button>
     </form>
   </p>
   <div th:if="${books.isEmpty()}">
-      <p style="color: red; font-weight: bold">Not found product</p>
+      <p style="color: red; font-weight: bold">Not found book!</p>
   </div>
   <table th:unless="${books.isEmpty()}">
     <thead>
@@ -24,6 +29,8 @@
           <th>Quantity</th>
           <th>Create At</th>
           <th>Publisher</th>
+          <th>Year</th>
+          <th th:if="${session.loggedInUser.getRole().equals('admin')}">Status</th>
           <th th:if="${session.loggedInUser.getRole().equals('admin')}">Action</th>
       </tr>
     </thead>
@@ -35,7 +42,11 @@
           <td th:text="${x.getCreatedAt()}">...</td>
           <td th:text="${x.getPublisher()}">...</td>
           <td th:text="${x.getYear()}">...</td>
-        <td th:if="${session.loggedInUser.getRole().equals('admin')}">
+          <td th:if="${session.loggedInUser.getRole().equals('admin')}">
+              <span th:if="${x.isStatus()}">Active</span>
+              <span th:if="${!x.isStatus()}">Inactive</span>
+          </td>
+          <td th:if="${session.loggedInUser.getRole().equals('admin')}">
               <a th:href="@{'/products/edit/' + ${x.id}}">Update</a> |
               <a th:href="@{'/products/delete/' + ${x.id}}"
                  onclick="return confirm('Are you sure?');"

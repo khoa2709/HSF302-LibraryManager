@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>List of books</title>
+</head>
+<body>
+  <h1>Category Management</h1>
+  <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+    <a th:href="@{'/books'}">Manage Books</a>
+    <a th:href="@{'/categories'}">Manage Categories</a>
+    <a th:href="@{'/users'}">Manage Users</a>
+
+  </div>
+
+  <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
+     You don't have permission to access this page!
+  </div>
+
+  <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+
+    <p>
+    <form th:action="@{'/categories'}" method="get">
+      <label for="keyword">Keyword: </label>
+      <input id="keyword" name="keyword" type="text" placeholder="Input category name">
+      <button type="submit">Search</button>
+    </form>
+    </p>
+
+    <div>
+      <a th:href="@{/categories/add}">Add New Category</a>
+    </div>
+
+    <div th:if="${cates.isEmpty()}">
+      <p style="color: red; font-weight: bold">Not found category</p>
+    </div>
+    <table th:unless="${cates.isEmpty()}">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="x : ${cates}">
+        <td th:text="${x.getName()}">...</td>
+        <td th:text="${x.getDescription()}">...</td>
+        <td>
+          <span th:if="${x.isStatus()}">Active</span>
+          <span th:if="${!x.isStatus()}">Inactive</span>
+        </td>
+        <td>
+          <a th:href="@{'/categories/edit/' + ${x.id}}">Update</a> |
+          <a th:href="@{'/categories/delete/' + ${x.id}}"
+             onclick="return confirm('Are you sure?');"
+          >Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <p>
+      <a th:href="@{'/logout'}">Log out</a>
+    </p>
+  </div>
+
+
+
+</body>
+</html>

@@ -16,9 +16,16 @@ public class BookService {
         return bookRepository.findByTitleContainingIgnoreCase(keyword);
     }
 
+    public List<Book> findActiveBooks() {
+        return bookRepository.findAllByStatus(true);
+    }
 
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    public List<Book> searchActiveBooks(String keyword) {
+        return bookRepository.findAllByStatusAndTitleContainingIgnoreCase(true, keyword);
     }
 
     public Optional<Book> findById(Long id) {

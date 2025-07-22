@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of books</title>
+</head>
+<body>
+    <h1>Category Management</h1>
+    <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+        <a th:href="@{'/books'}">Manage Books</a>
+        <a th:href="@{'/categories'}">Manage Categories</a>
+        <a th:href="@{'/users'}">Manage Users</a>
+
+    </div>
+
+    <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
+        You don't have permission to access this page!
+    </div>
+
+    <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+
+        <p>
+        <form th:action="@{'/users'}" method="get">
+            <label for="keyword">Keyword: </label>
+            <input id="keyword" name="keyword" type="text" placeholder="Input name of user">
+            <button type="submit">Search</button>
+        </form>
+        </p>
+
+        <div>
+            <a th:href="@{/users/add}">Add New User</a>
+        </div>
+
+        <div th:if="${users.isEmpty()}">
+            <p style="color: red; font-weight: bold">Not found user</p>
+        </div>
+        <table th:unless="${users.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Fullname</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Created Date</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="x : ${users}">
+                <td th:text="${x.getFullName()}">...</td>
+                <td th:text="${x.getUsername()}">...</td>
+                <td th:text="${x.getPassword()}">...</td>
+                <td th:text="${x.getRole()}">...</td>
+                <td>
+                    <span th:if="${x.isStatus()}">Active</span>
+                    <span th:if="${!x.isStatus()}">Inactive</span>
+                </td>
+                <td th:text="${x.getCreatedAt()}">...</td>
+                <td>
+                    <a th:href="@{'/users/edit/' + ${x.id}}">Update</a> |
+                    <a th:href="@{'/users/delete/' + ${x.id}}"
+                       onclick="return confirm('Are you sure?');"
+                    >Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>
+            <a th:href="@{'/logout'}">Log out</a>
+        </p>
+    </div>
+
+</body>
+</html>

@@ -25,7 +25,10 @@ public class CategoryService {
     }
 
     public void deleteById(Long id) {
-        categoryRepository.deleteById(id);
+        Optional<Category> optional = categoryRepository.findById(id);
+        Category category = optional.get();
+        category.setStatus(false);
+        categoryRepository.save(category);
     }
 
     public Long count() {
@@ -34,5 +37,9 @@ public class CategoryService {
 
     public void saveAll(List<Category> list) {
         categoryRepository.saveAll(list);
+    }
+
+    public boolean existsCategory(String name) {
+        return categoryRepository.existsByName(name);
     }
 }

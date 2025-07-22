@@ -43,7 +43,9 @@ public class UserService {
     }
 
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).get();
+        user.setStatus(false);
+        userRepository.save(user);
     }
 
     public Long count() {
@@ -52,5 +54,9 @@ public class UserService {
 
     public void saveAll(List<User> list) {
         userRepository.saveAll(list);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

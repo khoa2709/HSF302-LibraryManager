@@ -25,6 +25,9 @@ public class User {
     @Column(name = "Role", nullable = false)
     private String role;
 
+    @Column(name = "Status", nullable = false)
+    private boolean status;
+
     @Column(name = "CreatedAt", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -34,11 +37,12 @@ public class User {
     // Getters, setters, constructors
     public User() {}
 
-    public User(String fullName, String username, String password, String role) {
+    public User(String fullName, String username, String password, String role, boolean status) {
         this.fullName = fullName;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.status = status;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -54,4 +58,12 @@ public class User {
     public void setRole(String role) { this.role = role; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-} 
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${formMode == 'edit'} ? 'Edit Category' : 'Add New Category'">Category Form</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+  <div>
+    <div>
+      <div>
+        <h1 th:text="${formMode == 'edit'} ? 'Edit Category' : 'Add New Category'">Edit Category | Add New Category</h1>
+
+        <form th:action="@{'/categories/save'}" method="POST" th:object="${cate}">
+          <input type="hidden" th:field="*{id}" />
+
+          <div>
+            <label for="name">Category Name:</label>
+            <input type="text" id="name" th:field="*{name}"
+                   required/>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name is required!</span>
+            <span th:if="${duplicated}" th:text="${duplicated}" style="color: red;"></span>
+          </div>
+
+          <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description" th:field="*{description}"/>
+          </div>
+
+          <div>
+            <label for="status">Status:</label>
+            <select id="status" th:field="*{status}">
+              <option value="true">Active (true)</option>
+              <option value="false">Inactive (false)</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" th:text="${formMode == 'edit'} ? 'Update' : 'Create'">Submit</button>
+            <a href="/categories" th:text="${formMode == 'edit'} ? 'Cancel' : 'Cancel'">Cancel</a>
+          </div>
+
+          <div>
+            <input type="hidden" name="formMode" th:value="${formMode}">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
