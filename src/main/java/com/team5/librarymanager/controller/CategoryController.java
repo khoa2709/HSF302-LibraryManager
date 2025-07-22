@@ -30,7 +30,7 @@ public class CategoryController {
 
         model.addAttribute("cates", categoryService.findAll());
 
-        return "/categories";
+        return "categories";
     }
 
     @PostMapping("/categories/save")
@@ -71,7 +71,7 @@ public class CategoryController {
 
         model.addAttribute("formMode", "new");
 
-        return "/category-form";
+        return "category-form";
     }
     
 
@@ -87,7 +87,7 @@ public class CategoryController {
 
         model.addAttribute("formMode", "edit");
 
-        return "/category-form";
+        return "category-form";
     }
 
     @GetMapping("/categories/delete/{id}")

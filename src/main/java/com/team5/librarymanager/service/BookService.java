@@ -37,7 +37,9 @@ public class BookService {
     }
 
     public void deleteById(Long id) {
-        bookRepository.deleteById(id);
+        Book book = bookRepository.findById(id).get();
+        book.setStatus(false);
+        bookRepository.save(book);
     }
 
     public Long count() {
@@ -46,5 +48,9 @@ public class BookService {
 
     public void saveAll(List<Book> list) {
         bookRepository.saveAll(list);
+    }
+
+    public boolean existsByTitle(String title) {
+        return bookRepository.existsByTitle(title);
     }
 }
