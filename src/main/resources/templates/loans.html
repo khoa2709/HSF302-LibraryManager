@@ -11,7 +11,7 @@
     <div th:if="${error}" style="color: red" th:text="${error}"></div>
 
     <div th:if="${loans.isEmpty()}">
-        <p>You have no loans.</p>
+        <p> You don't have permission to access this page!</p>
     </div>
 
     <table th:unless="${loans.isEmpty()}">
@@ -22,7 +22,7 @@
                 <th>Due Date</th>
                 <th>Return Date</th>
                 <th>Status</th>
-                <th th:if="${session.loggedInUser.getRole().equals('admin')}">Action</th>
+                <th th:if="${session.loggedInUser.getRole().equals('staff')}">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +32,7 @@
                 <td th:text="${#temporals.format(loan.getDueDate(), 'MM/dd/yyyy')}">...</td>
                 <td th:text="${loan.getReturnDate() != null ? #temporals.format(loan.getReturnDate(), 'MM/dd/yyyy') : '-'}">...</td>
                 <td th:text="${loan.getStatus().getDisplayValue()}">...</td>
-                <td th:if="${session.loggedInUser.getRole().equals('admin')}">
+                <td th:if="${session.loggedInUser.getRole().equals('staff')}">
                     <a th:if="${loan.getReturnDate() == null}"
                        th:href="@{'/loans/return/' + ${loan.getId()}}"
                        onclick="return confirm('Are you sure to return this book?');">

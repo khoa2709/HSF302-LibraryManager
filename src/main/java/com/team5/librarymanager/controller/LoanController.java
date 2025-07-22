@@ -32,8 +32,8 @@ public class LoanController {
             return "redirect:/login";
         }
 
-        // Admin xem tất cả các phiếu mượn
-        if (user.getRole().equals("admin")) {
+        // staff xem tất cả các phiếu mượn
+        if (user.getRole().equals("staff")) {
             model.addAttribute("loans", loanService.findAll());
         } else {
             // User thường chỉ xem phiếu mượn của mình
@@ -132,7 +132,7 @@ public class LoanController {
                     .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu mượn"));
             
             // Kiểm tra người dùng có quyền trả sách này không
-            if (!user.getRole().equals("admin") && !loan.getUser().getId().equals(user.getId())) {
+            if (user.getRole().equals("member") && !loan.getUser().getId().equals(user.getId())) {
                 throw new IllegalStateException("Bạn không có quyền trả sách này");
             }
 
@@ -154,7 +154,7 @@ public class LoanController {
             return "redirect:/login";
         }
 
-        if (user.getRole().equals("admin")) {
+        if (user.getRole().equals("staff")) {
             model.addAttribute("loans", loanService.getCurrentLoans());
         } else {
             model.addAttribute("loans", loanService.getLoansByUserAndStatus(user.getId(), LoanStatus.BORROWED));
