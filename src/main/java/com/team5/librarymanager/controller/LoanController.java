@@ -6,6 +6,7 @@ import com.team5.librarymanager.entity.LoanStatus;
 import com.team5.librarymanager.entity.User;
 import com.team5.librarymanager.service.BookService;
 import com.team5.librarymanager.service.LoanService;
+import com.team5.librarymanager.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/loans")
@@ -24,6 +27,22 @@ public class LoanController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private UserService userService; 
+
+    @GetMapping("/history")
+    public String viewLoanHistory(Model model, Principal principal) {
+    User user = userService.findByUsername(principal.getName());
+    List<Loan> loans;
+    if (user.getRole().equals("staff") || user.getRole().equals("admin")) {
+        loans = loanService.findAll();
+    } else {
+        loans = loanService.getLoanHistoryByUser(user.getId());
+    }
+    model.addAttribute("loans", loans);
+    return "loans"; // Sử dụng lại template loans.html
+}
 
     @GetMapping("")
     public String showLoans(Model model, HttpSession session) {

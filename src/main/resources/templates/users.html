@@ -5,13 +5,13 @@
     <title>List of books</title>
 </head>
 <body>
-    <h1>Category Management</h1>
+    <h1>User Management</h1>
     <div th:if="${session.loggedInUser.getRole().equals('admin')}">
         <a th:href="@{'/books'}">Manage Books</a>
         <a th:href="@{'/categories'}">Manage Categories</a>
         <a th:href="@{'/users'}">Manage Users</a>
         <a th:href="@{'/loans'}">Manage Loans</a>
-
+        <a th:href="@{'/report'}">Report</a>
     </div>
 
     <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
@@ -60,7 +60,7 @@
                 <td th:text="${x.getCreatedAt()}">...</td>
                 <td>
                     <a th:href="@{'/users/edit/' + ${x.id}}">Update</a> |
-                    <a th:href="@{'/users/delete/' + ${x.id}}"
+                    <a th:if="${x.isStatus()}" th:href="@{'/users/delete/' + ${x.id}}"
                        onclick="return confirm('Are you sure?');"
                     >Delete</a>
                 </td>
