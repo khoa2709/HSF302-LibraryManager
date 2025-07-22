@@ -8,8 +8,12 @@
   <h1>Book Management</h1>
   <div th:if="${session.loggedInUser.getRole().equals('admin')}">
       <a th:href="@{'/books'}">Manage Books</a>
-    <a th:href="@{'/categories'}">Manage Categories</a>
+      <a th:href="@{'/categories'}">Manage Categories</a>
       <a th:href="@{'/users'}">Manage Users</a>
+      <a th:href="@{'/loans'}">Manage Loans</a>
+  </div>
+  <div th:unless="${session.loggedInUser.getRole().equals('admin')}">
+      <a th:href="@{'/loans'}">Manage My Loans</a>
   </div>
   <p>
     <form th:action="@{'/books'}" method="get">
@@ -32,6 +36,7 @@
           <th>Year</th>
           <th th:if="${session.loggedInUser.getRole().equals('admin')}">Status</th>
           <th th:if="${session.loggedInUser.getRole().equals('admin')}">Action</th>
+          <th th:unless="${session.loggedInUser.getRole().equals('admin')}">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -52,14 +57,21 @@
                  onclick="return confirm('Are you sure?');"
               >Delete</a>
           </td>
+          <td th:unless="${session.loggedInUser.getRole().equals('admin')}">
+              <a th:if="${x.isStatus() && x.getQuantity() > 0}"
+                 th:href="@{'/loans/borrow/' + ${x.id}}"
+                 onclick="return confirm('Are you sure to borrow this book?');">
+                  Borrow
+              </a>
+              <span th:if="${!x.isStatus() || x.getQuantity() <= 0}" style="color: red;">
+                  Not Available
+              </span>
+          </td>
       </tr>
     </tbody>
   </table>
   <p>
     <a th:href="@{'/logout'}">Log out</a>
   </p>
-
-
-
 </body>
 </html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Borrow Book</title>
+</head>
+<body>
+    <h1>Borrow Book</h1>
+
+    <div th:if="${error}" style="color: red" th:text="${error}"></div>
+
+    <form th:action="@{/loans/borrow}" method="post">
+        <input type="hidden" name="bookId" th:value="${book.id}">
+        
+        <div>
+            <label>Book Title:</label>
+            <span th:text="${book.title}"></span>
+        </div>
+        
+        <div>
+            <label>Author:</label>
+            <span th:text="${book.author}"></span>
+        </div>
+
+        <div>
+            <label>Publisher:</label>
+            <span th:text="${book.publisher}"></span>
+        </div>
+
+        <div>
+            <label>Available Quantity:</label>
+            <span th:text="${book.quantity}"></span>
+        </div>
+
+        <div>
+            <label>Loan Date:</label>
+            <span th:text="${#temporals.format(today, 'MM/dd/yyyy')}"></span>
+        </div>
+
+        <div>
+            <label for="dueDate">Due Date:</label>
+            <input type="date" id="dueDate" name="dueDate" required
+                   th:min="${#temporals.format(today, 'yyyy-MM-dd')}"
+                   th:max="${#temporals.format(maxDueDate, 'yyyy-MM-dd')}">
+            <span>(Maximum 30 days)</span>
+        </div>
+
+        <button type="submit">Confirm Borrow</button>
+        <a th:href="@{/loans/service}">Cancel</a>
+    </form>
+</body>
+</html> 

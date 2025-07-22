@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Loans</title>
+</head>
+<body>
+    <h1>Manage Loans</h1>
+
+    <div th:if="${success}" th:text="${success}"></div>
+    <div th:if="${error}" style="color: red" th:text="${error}"></div>
+
+    <div th:if="${loans.isEmpty()}">
+        <p>You have no loans.</p>
+    </div>
+
+    <table th:unless="${loans.isEmpty()}">
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Loan Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th th:if="${session.loggedInUser.getRole().equals('admin')}">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="loan : ${loans}">
+                <td th:text="${loan.getBook().getTitle()}">...</td>
+                <td th:text="${#temporals.format(loan.getLoanDate(), 'MM/dd/yyyy')}">...</td>
+                <td th:text="${#temporals.format(loan.getDueDate(), 'MM/dd/yyyy')}">...</td>
+                <td th:text="${loan.getReturnDate() != null ? #temporals.format(loan.getReturnDate(), 'MM/dd/yyyy') : '-'}">...</td>
+                <td th:text="${loan.getStatus().getDisplayValue()}">...</td>
+                <td th:if="${session.loggedInUser.getRole().equals('admin')}">
+                    <a th:if="${loan.getReturnDate() == null}"
+                       th:href="@{'/loans/return/' + ${loan.getId()}}"
+                       onclick="return confirm('Are you sure to return this book?');">
+                        Return
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        
+        <a th:href="@{'/books'}">Back</a>
+    </p>
+</body>
+</html> 

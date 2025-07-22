@@ -50,10 +50,10 @@ public class DataInitializer {
                 Book b3 = bookService.findById(3L).orElse(null);
                 Book b5 = bookService.findById(5L).orElse(null);
                 loanService.saveAll(Arrays.asList(
-                    new Loan(nlv, b1, LocalDate.of(2025,7,1), LocalDate.of(2025,7,10), LocalDate.of(2025,7,9), "returned"),
-                    new Loan(nlv, b3, LocalDate.of(2025,7,2), LocalDate.of(2025,7,12), LocalDate.of(2025,7,11), "returned"),
-                    new Loan(nht, b2, LocalDate.of(2025,7,10), LocalDate.of(2025,7,17), null, "borrowed"),
-                    new Loan(nch, b5, LocalDate.of(2025,6,25), LocalDate.of(2025,7,5), null, "late")
+                    new Loan(nlv, b1, LocalDate.of(2025,7,1), LocalDate.of(2025,7,10), LocalDate.of(2025,7,9), LoanStatus.RETURNED),
+                    new Loan(nlv, b3, LocalDate.of(2025,7,2), LocalDate.of(2025,7,12), LocalDate.of(2025,7,11), LoanStatus.RETURNED),
+                    new Loan(nht, b2, LocalDate.of(2025,7,10), LocalDate.of(2025,7,17), null, LoanStatus.BORROWED),
+                    new Loan(nch, b5, LocalDate.of(2025,6,25), LocalDate.of(2025,7,5), null, LoanStatus.OVERDUE)
                 ));
 
         };
