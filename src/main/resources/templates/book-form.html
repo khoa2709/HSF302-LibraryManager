@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formMode == 'edit'} ? 'Edit Book' : 'Add New Book'">Book Form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div>
+    <div>
+        <div>
+            <h1 th:text="${formMode == 'edit'} ? 'Edit Book' : 'Add New Book'">Edit Book | Add New Book</h1>
+
+            <form th:action="@{'/books/save'}" method="POST" th:object="${book}">
+                <input type="hidden" th:field="*{id}" />
+
+                <div>
+                    <label for="title">Book Title:</label>
+                    <input type="text" id="title" th:field="*{title}"
+                           required/>
+                    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title is required!</span>
+                    <span th:if="${duplicated}" th:text="${duplicated}" style="color: red"></span>
+                </div>
+
+                <div>
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" th:field="*{author}"
+                           required/>
+                    <span th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></span>
+                </div>
+
+                <div>
+                    <label for="publisher">Publisher:</label>
+                    <input type="text" id="publisher" name="publisher"
+                           th:field="*{publisher}" required />
+                    <span th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}"></span>
+                </div>
+
+                <div>
+                    <label for="year">Year:</label>
+                    <input type="text" id="year" name="year"
+                           th:field="*{year}" required />
+                    <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+                </div>
+
+                <div>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity"
+                           th:field="*{quantity}" required />
+                    <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></span>
+                </div>
+
+                <div>
+                    <label for="category">Category:</label>
+                    <select id="category" name="category.id" th:field="*{category.id}" required>
+                        <option th:each="c : ${cates}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                                th:selected="${book.category != null and book.category.id == c.id}">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('category.id')}" th:errors="*{category.id}"></span>
+                </div>
+
+                <div>
+                    <label for="status">Status:</label>
+                    <select id="status" th:field="*{status}">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit">Save</button>
+                    <a th:href="@{/books}">Cancel</a>
+                </div>
+
+                <div>
+                    <input type="hidden" name="formMode" th:value="${formMode}">
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

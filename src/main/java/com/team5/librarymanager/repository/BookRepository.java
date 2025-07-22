@@ -10,4 +10,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByStatus(boolean status);
 
     List<Book> findAllByStatusAndTitleContainingIgnoreCase(boolean b, String keyword);
+
+    boolean existsByTitle(String title);
 }

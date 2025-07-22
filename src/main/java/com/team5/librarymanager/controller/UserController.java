@@ -31,7 +31,7 @@ public class UserController {
 
         model.addAttribute("users", userService.findAll());
 
-        return "/users";
+        return "users";
     }
 
     @PostMapping("/users/save")
@@ -77,7 +77,7 @@ public class UserController {
 
         model.addAttribute("formMode", "new");
 
-        return "/user-form";
+        return "user-form";
     }
 
 
@@ -98,7 +98,7 @@ public class UserController {
 
         model.addAttribute("formMode", "edit");
 
-        return "/user-form";
+        return "user-form";
     }
 
     @GetMapping("/users/delete/{id}")
