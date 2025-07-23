@@ -10,8 +10,10 @@
         <a th:href="@{'/books'}">Manage Books</a>
         <a th:href="@{'/categories'}">Manage Categories</a>
         <a th:href="@{'/users'}">Manage Users</a>
-        <a th:href="@{'/loans'}">Manage Loans</a>
 
+    </div>
+    <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+        <a th:href="@{'/loans'}">Manage Loans</a>
     </div>
 
     <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
