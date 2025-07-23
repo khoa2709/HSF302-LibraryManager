@@ -11,6 +11,7 @@
     <a th:href="@{'/categories'}">Manage Categories</a>
     <a th:href="@{'/users'}">Manage Users</a>
     <a th:href="@{'/loans'}">Manage Loans</a>
+    <a th:href="@{'/report'}">Report</a>
   </div>
 
   <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
@@ -53,7 +54,7 @@
         </td>
         <td>
           <a th:href="@{'/categories/edit/' + ${x.id}}">Update</a> |
-          <a th:href="@{'/categories/delete/' + ${x.id}}"
+          <a th:if="${x.isStatus()}" th:href="@{'/categories/delete/' + ${x.id}}"
              onclick="return confirm('Are you sure?');"
           >Delete</a>
         </td>

@@ -10,6 +10,8 @@
       <a th:href="@{'/books'}">Manage Books</a>
       <a th:href="@{'/categories'}">Manage Categories</a>
       <a th:href="@{'/users'}">Manage Users</a>
+      <a th:href="@{'/loans'}">Manage Loans</a>
+      <a th:href="@{'/report'}">Report</a>
   </div>
   <div th:if="${session.loggedInUser.getRole().equals('staff')}">
       <a th:href="@{'/loans'}">Manage Loans</a>
@@ -24,6 +26,10 @@
         <button type="submit">Search</button>
     </form>
   </p>
+
+  <div>
+      <a th:href="@{/books/add}">Add New Book</a>
+  </div>
   <div th:if="${books.isEmpty()}">
       <p style="color: red; font-weight: bold">Not found book!</p>
   </div>
@@ -33,7 +39,7 @@
           <th>Name</th>
           <th>Author</th>
           <th>Quantity</th>
-          <th>Create At</th>
+          <th th:if="${session.loggedInUser.getRole().equals('admin')}">Create At</th>
           <th>Publisher</th>
           <th>Year</th>
           <th th:if="${session.loggedInUser.getRole().equals('admin')}">Status</th>
@@ -46,7 +52,7 @@
           <td th:text="${x.getTitle()}">...</td>
           <td th:text="${x.getAuthor()}">...</td>
           <td th:text="${x.getQuantity()}">...</td>
-          <td th:text="${x.getCreatedAt()}">...</td>
+          <td th:text="${x.getCreatedAt()}" th:if="${session.loggedInUser.getRole().equals('admin')}">...</td>
           <td th:text="${x.getPublisher()}">...</td>
           <td th:text="${x.getYear()}">...</td>
           <td th:if="${session.loggedInUser.getRole().equals('admin')}">
@@ -54,8 +60,8 @@
               <span th:if="${!x.isStatus()}">Inactive</span>
           </td>
           <td th:if="${session.loggedInUser.getRole().equals('admin')}">
-              <a th:href="@{'/products/edit/' + ${x.id}}">Update</a> |
-              <a th:href="@{'/products/delete/' + ${x.id}}"
+              <a th:href="@{'/books/edit/' + ${x.id}}">Update</a> |
+              <a th:if="${x.isStatus()}" th:href="@{'/books/delete/' + ${x.id}}"
                  onclick="return confirm('Are you sure?');"
               >Delete</a>
           </td>

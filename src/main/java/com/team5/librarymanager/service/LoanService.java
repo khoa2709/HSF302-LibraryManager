@@ -60,6 +60,26 @@ public class LoanService {
         return loanRepository.findByUserIdAndStatus(userId, status);
     }
 
+    //Lấy lịch sử mượn sách của user
+    public List<Loan> getLoanHistoryByUser(Long userId) {
+        return loanRepository.findByUserId(userId);
+    }
+
+    //Thống kê sách đã mượn
+    public Long countCurrentLoans() {
+        return loanRepository.countByStatus(LoanStatus.BORROWED);
+    }
+
+    //Thống kê sách quá hạn
+    public Long countOverdueLoans() {
+        return loanRepository.countOverdueLoans();
+    }
+
+    //Thống kê số lượng sách
+    public Long countByBookId(Long bookId) {
+        return loanRepository.countByBookId(bookId);
+    }
+
     @Transactional
     public Loan borrowBook(User user, Book book, int loanDays) {
         // Kiểm tra sách có sẵn không

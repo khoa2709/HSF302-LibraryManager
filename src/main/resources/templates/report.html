@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Report</title>
+</head>
+<body>
+    <h1>Statistics</h1>
+    <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+        <a th:href="@{'/books'}">Manage Books</a>
+        <a th:href="@{'/categories'}">Manage Categories</a>
+        <a th:href="@{'/users'}">Manage Users</a>
+        <a th:href="@{'/loans'}">Manage Loans</a>
+    </div>
+    <table>
+        <tr>
+            <th>Loan book</th>
+            <th>Number</th>
+        </tr>
+        <tr>
+            <td>Number of books borrowed: </td>
+            <td th:text="${borrowed}">0</td>
+        </tr>
+        <tr>
+            <td>Number of overdue books: </td>
+            <td th:text="${overdue}">0</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Number</th>
+        </tr>
+        <tr>
+            <td>Number of users active: </td>
+            <td th:text="${usersActive}">0</td>
+        </tr>
+        <tr>
+            <td>Number of users inactive: </td>
+            <td th:text="${usersInactive}">0</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Book</th>
+            <th>Number</th>
+        </tr>
+        <tr>
+            <td>Number of books active: </td>
+            <td th:text="${booksActive}">0</td>
+        </tr>
+        <tr>
+            <td>Number of books inactive: </td>
+            <td th:text="${booksInactive}">0</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Number</th>
+        </tr>
+        <tr>
+            <td>Number of categories active: </td>
+            <td th:text="${catesActive}">0</td>
+        </tr>
+        <tr>
+            <td>Number of categories inactive: </td>
+            <td th:text="${catesInactive}">0</td>
+        </tr>
+    </table>
+    <a href="/books">Back</a>
+</body>
+</html>
