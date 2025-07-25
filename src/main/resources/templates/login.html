@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
 <div>
@@ -10,7 +11,7 @@
     <div>
         <div>
             <h1>Login</h1>
-            <div th:if="${error}" th:text="${error}">Login Error</div>
+            <div th:if="${error}" th:text="${error}" class="login-error">Login Error</div>
             <form th:action="@{/auth}" method="post">
                 <div>
                     <label for="uname">Username:</label>

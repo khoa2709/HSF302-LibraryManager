@@ -1,0 +1,187 @@
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, form, input, select, button, table, th, td, a, div {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: #7c0202;
+    color: #fff;
+    min-height: 100vh;
+    padding: 32px 0;
+}
+
+h1 {
+    color: yellow;
+    margin-bottom: 24px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+form {
+    background: transparent;
+    padding: 24px 32px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    max-width: 500px;
+    margin: 24px auto;
+    border: 1px solid yellow;
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: yellow;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="number"],
+form input[type="date"],
+form select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9fafb;
+    font-size: 1rem;
+    transition: border 0.2s;
+    color: #000;
+}
+
+form input:focus, form select:focus {
+    border-color: yellow;
+    outline: none;
+}
+
+form button, a.button, .transparent-button {
+    background: transparent;
+    color: #ec407a;
+    border: 1px solid #ec407a;
+    padding: 10px 22px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+form button:hover, a.button:hover, .transparent-button:hover {
+    background: #ec407a;
+    color: #fff;
+}
+
+a {
+    color: yellow;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #f9c74f;
+    text-decoration: underline;
+}
+
+.table-container, .books-table-container {
+    max-width: 1000px;
+    margin: 32px auto;
+    background: transparent;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    padding: 24px;
+    border: 1px solid yellow;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    background: transparent;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e1e4e8;
+    text-align: left;
+}
+
+table th {
+    background: #7c0202;
+    color: yellow;
+    font-weight: 600;
+}
+
+table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Navigation bar styles */
+.navbar {
+    background: #7c0202;
+    padding: 12px 0;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar a {
+    color: yellow;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+    flex: 1;
+    text-align: center;
+}
+
+.navbar a:hover {
+    color: #f9c74f;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+
+.login-error, .error-message {
+    color: #f8d7da;
+    text-align: center;
+    margin: 12px 0 18px 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    form, .table-container, .books-table-container {
+        padding: 12px 6px;
+    }
+    table th, table td {
+        padding: 8px 4px;
+        font-size: 0.95rem;
+    }
+    h1 {
+        font-size: 1.3rem;
+    }
+    .navbar {
+        flex-direction: column;
+    }
+    .navbar a {
+        flex: none;
+        width: 100%;
+        margin: 6px 0;
+    }
+}
