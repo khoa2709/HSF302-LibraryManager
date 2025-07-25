@@ -19,6 +19,7 @@
         <thead>
             <tr>
                 <th>Book Title</th>
+                <th>Borrower Name</th>
                 <th>Loan Date</th>
                 <th>Due Date</th>
                 <th>Return Date</th>
@@ -29,6 +30,7 @@
         <tbody>
             <tr th:each="loan : ${loans}">
                 <td th:text="${loan.getBook().getTitle()}">...</td>
+                <td th:text="${loan.getUser().getFullName()}">...</td>
                 <td th:text="${#temporals.format(loan.getLoanDate(), 'MM/dd/yyyy')}">...</td>
                 <td th:text="${#temporals.format(loan.getDueDate(), 'MM/dd/yyyy')}">...</td>
                 <td th:text="${loan.getReturnDate() != null ? #temporals.format(loan.getReturnDate(), 'MM/dd/yyyy') : '-'}">...</td>
@@ -39,6 +41,7 @@
                        onclick="return confirm('Are you sure to return this book?');">
                         Return
                     </a>
+                  
                 </td>
             </tr>
         </tbody>

@@ -11,15 +11,12 @@
       <a th:href="@{'/books'}">Manage Books</a>
       <a th:href="@{'/categories'}">Manage Categories</a>
       <a th:href="@{'/users'}">Manage Users</a>
-      <a th:href="@{'/loans'}">Manage Loans</a>
       <a th:href="@{'/report'}">Report</a>
   </div>
   <div th:if="${session.loggedInUser.getRole().equals('staff')}">
       <a th:href="@{'/loans'}">Manage Loans</a>
   </div>
-  <div th:if="${session.loggedInUser.getRole().equals('member')}">
-      <a th:href="@{'/loans'}">Manage My Loans</a>
-  </div>
+  
   <p>
     <form th:action="@{'/books'}" method="get">
         <label for="keyword">Keyword: </label>
@@ -45,7 +42,8 @@
           <th>Year</th>
           <th th:if="${session.loggedInUser.getRole().equals('admin')}">Status</th>
           <th th:if="${session.loggedInUser.getRole().equals('admin')}">Action</th>
-          <th th:if="${session.loggedInUser.getRole().equals('member')}">Action</th>
+          <th th:if="${session.loggedInUser.getRole().equals('staff')}">Action</th>
+        
       </tr>
     </thead>
     <tbody>
@@ -66,7 +64,7 @@
                  onclick="return confirm('Are you sure?');"
               >Delete</a>
           </td>
-          <td th:if="${session.loggedInUser.getRole().equals('member')}">
+          <td th:if="${session.loggedInUser.getRole().equals('staff')}">
               <a th:if="${x.isStatus() && x.getQuantity() > 0}"
                  th:href="@{'/loans/borrow/' + ${x.id}}"
                  onclick="return confirm('Are you sure to borrow this book?');">
@@ -76,6 +74,7 @@
                   Not Available
               </span>
           </td>
+          
       </tr>
     </tbody>
   </table>

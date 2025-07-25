@@ -95,6 +95,7 @@ public class LoanController {
     public String processBorrowBook(@RequestParam Long bookId, 
                                   @RequestParam LocalDate dueDate,
                                   HttpSession session, 
+                                  @RequestParam String borrowerName,
                                   RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) {
@@ -102,39 +103,11 @@ public class LoanController {
         }
 
         try {
-            Book book = bookService.findById(bookId)
-                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sách"));
-            
-            if (!book.isStatus() || book.getQuantity() <= 0) {
-                throw new IllegalStateException("Sách không khả dụng để mượn");
-            }
-
-            // Kiểm tra ngày trả hợp lệ
-            LocalDate today = LocalDate.now();
-            LocalDate maxDueDate = today.plusDays(30);
-            
-            if (dueDate.isBefore(today) || dueDate.isAfter(maxDueDate)) {
-                throw new IllegalStateException("Ngày trả không hợp lệ (tối đa 30 ngày)");
-            }
-
-            // Tạo phiếu mượn mới
-            Loan loan = new Loan();
-            loan.setUser(user);
-            loan.setBook(book);
-            loan.setLoanDate(today);
-            loan.setDueDate(dueDate);
-            loan.setStatus(LoanStatus.BORROWED);
-            
-            loanService.save(loan);
-            
-            // Giảm số lượng sách
-            book.setQuantity(book.getQuantity() - 1);
-            bookService.save(book);
-
-            redirectAttributes.addFlashAttribute("success", "Mượn sách thành công!");
-        } catch (IllegalStateException | IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-        }
+        loanService.borrowBookAsStaff(bookId, dueDate, borrowerName);
+        redirectAttributes.addFlashAttribute("success", "Mượn sách thành công!");
+    } catch (IllegalStateException | IllegalArgumentException e) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+    }
 
         return "redirect:/loans";
     }

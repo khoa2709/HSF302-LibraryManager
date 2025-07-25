@@ -9,6 +9,7 @@
     <h1>Borrow Book</h1>
 
     <div th:if="${error}" style="color: red" th:text="${error}"></div>
+    <div th:if="${success}" style="color: green" th:text="${success}"></div>
 
     <form th:action="@{/loans/borrow}" method="post">
         <input type="hidden" name="bookId" th:value="${book.id}">
@@ -31,6 +32,10 @@
         <div>
             <label>Available Quantity:</label>
             <span th:text="${book.quantity}"></span>
+        </div>
+        <div>
+            <label for="borrowerName">Borrower Name:</label>
+            <input type="text" id="borrowerName" name="borrowerName" required>
         </div>
 
         <div>
