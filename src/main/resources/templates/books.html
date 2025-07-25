@@ -14,6 +14,8 @@
       <a th:href="@{'/report'}">Report</a>
   </div>
   <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+      <a th:href="@{'/books'}">Manage Books</a>
+      <a th:href="@{'/categories'}">Manage Categories</a>
       <a th:href="@{'/loans'}">Manage Loans</a>
   </div>
   
@@ -25,7 +27,7 @@
     </form>
   </p>
 
-  <div>
+  <div th:if="${session.loggedInUser.getRole().equals('staff')}">
       <a th:href="@{/books/add}">Add New Book</a>
   </div>
   <div th:if="${books.isEmpty()}">
@@ -37,11 +39,10 @@
           <th>Name</th>
           <th>Author</th>
           <th>Quantity</th>
-          <th th:if="${session.loggedInUser.getRole().equals('admin')}">Create At</th>
+          <th th:if="${session.loggedInUser.getRole().equals('staff')}">Create At</th>
           <th>Publisher</th>
           <th>Year</th>
-          <th th:if="${session.loggedInUser.getRole().equals('admin')}">Status</th>
-          <th th:if="${session.loggedInUser.getRole().equals('admin')}">Action</th>
+          <th th:if="${session.loggedInUser.getRole().equals('staff')}">Status</th>
           <th th:if="${session.loggedInUser.getRole().equals('staff')}">Action</th>
         
       </tr>
@@ -51,23 +52,21 @@
           <td th:text="${x.getTitle()}">...</td>
           <td th:text="${x.getAuthor()}">...</td>
           <td th:text="${x.getQuantity()}">...</td>
-          <td th:text="${x.getCreatedAt()}" th:if="${session.loggedInUser.getRole().equals('admin')}">...</td>
+          <td th:text="${x.getCreatedAt()}" th:if="${session.loggedInUser.getRole().equals('staff')}">...</td>
           <td th:text="${x.getPublisher()}">...</td>
           <td th:text="${x.getYear()}">...</td>
-          <td th:if="${session.loggedInUser.getRole().equals('admin')}">
+          <td th:if="${session.loggedInUser.getRole().equals('staff')}">
               <span th:if="${x.isStatus()}">Active</span>
               <span th:if="${!x.isStatus()}">Inactive</span>
           </td>
-          <td th:if="${session.loggedInUser.getRole().equals('admin')}">
+          <td th:if="${session.loggedInUser.getRole().equals('staff')}">
               <a th:href="@{'/books/edit/' + ${x.id}}">Update</a> |
               <a th:if="${x.isStatus()}" th:href="@{'/books/delete/' + ${x.id}}"
                  onclick="return confirm('Are you sure?');"
-              >Delete</a>
-          </td>
-          <td th:if="${session.loggedInUser.getRole().equals('staff')}">
+              >Delete</a> |
               <a th:if="${x.isStatus() && x.getQuantity() > 0}"
                  th:href="@{'/loans/borrow/' + ${x.id}}"
-                 onclick="return confirm('Are you sure to borrow this book?');">
+                 onclick="return confirm('Are you sure to loan this book?');">
                   Borrow
               </a>
               <span th:if="${!x.isStatus() || x.getQuantity() <= 0}" style="color: red;">

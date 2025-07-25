@@ -18,17 +18,23 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public String showCategories(Model model, HttpSession session){
+    public String showCategories(@RequestParam(value = "keyword", required = false, defaultValue = "") String kw, Model model, HttpSession session){
 
         User user = (User) session.getAttribute("loggedInUser");
 
         if(user == null){
             return "redirect:/login";
-        } else if (!user.getRole().equals("admin")) {
+        } else if (!user.getRole().equals("staff") && !user.getRole().equals("admin")) {
             return "redirect:/books";
         }
 
-        model.addAttribute("cates", categoryService.findAll());
+        if (kw.equals("")) {
+            model.addAttribute("cates", categoryService.findAll());
+        } else {
+            model.addAttribute("cates", categoryService.searchCates(kw));
+        }
+
+
 
         return "categories";
     }
@@ -67,6 +73,10 @@ public class CategoryController {
             return "redirect:/login";
         }
 
+        if(!user.getRole().equals("staff")) {
+            return "redirect:/categories";
+        }
+
         model.addAttribute("cate", new Category());
 
         model.addAttribute("formMode", "new");
@@ -81,6 +91,11 @@ public class CategoryController {
         if(user == null){
             return "redirect:/login";
         }
+
+        if(!user.getRole().equals("staff")) {
+            return "redirect:/categories";
+        }
+
         Category category = categoryService.findById(id).get();
 
         model.addAttribute("cate", category);
@@ -98,8 +113,8 @@ public class CategoryController {
             return "redirect:/login";
         }
 
-        if (!acc.getRole().equals("admin")) {
-            return "redirect:/books";
+        if (!acc.getRole().equals("staff")) {
+            return "redirect:/categories";
         }
 
         categoryService.deleteById(id);

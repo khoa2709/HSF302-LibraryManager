@@ -8,28 +8,28 @@
 <body>
   <h1>Category Management</h1>
   <div th:if="${session.loggedInUser.getRole().equals('admin')}">
-    <a th:href="@{'/books'}">Manage Books</a>
-    <a th:href="@{'/categories'}">Manage Categories</a>
-    <a th:href="@{'/users'}">Manage Users</a>
-    <a th:href="@{'/loans'}">Manage Loans</a>
-    <a th:href="@{'/report'}">Report</a>
+      <a th:href="@{'/books'}">Manage Books</a>
+      <a th:href="@{'/categories'}">Manage Categories</a>
+      <a th:href="@{'/users'}">Manage Users</a>
+      <a th:href="@{'/report'}">Report</a>
+  </div>
+  <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+      <a th:href="@{'/books'}">Manage Books</a>
+      <a th:href="@{'/categories'}">Manage Categories</a>
+      <a th:href="@{'/loans'}">Manage Loans</a>
   </div>
 
-  <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
-     You don't have permission to access this page!
-  </div>
-
-  <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+  <div>
 
     <p>
-    <form th:action="@{'/categories'}" method="get">
+    <form th:action="@{'/categories'}" method="get">  
       <label for="keyword">Keyword: </label>
       <input id="keyword" name="keyword" type="text" placeholder="Input category name">
       <button type="submit">Search</button>
     </form>
     </p>
 
-    <div>
+    <div th:if="${session.loggedInUser.getRole().equals('staff')}">
       <a th:href="@{/categories/add}">Add New Category</a>
     </div>
 
@@ -41,19 +41,19 @@
       <tr>
         <th>Name</th>
         <th>Description</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th th:if="${session.loggedInUser.getRole().equals('staff')}">Status</th>
+        <th th:if="${session.loggedInUser.getRole().equals('staff')}">Action</th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="x : ${cates}">
         <td th:text="${x.getName()}">...</td>
         <td th:text="${x.getDescription()}">...</td>
-        <td>
+        <td th:if="${session.loggedInUser.getRole().equals('staff')}">
           <span th:if="${x.isStatus()}">Active</span>
           <span th:if="${!x.isStatus()}">Inactive</span>
         </td>
-        <td>
+        <td th:if="${session.loggedInUser.getRole().equals('staff')}">
           <a th:href="@{'/categories/edit/' + ${x.id}}">Update</a> |
           <a th:if="${x.isStatus()}" th:href="@{'/categories/delete/' + ${x.id}}"
              onclick="return confirm('Are you sure?');"

@@ -19,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public String showUsers(Model model, HttpSession session){
+    public String showUsers(@RequestParam(value = "keyword", required = false, defaultValue = "") String kw, Model model, HttpSession session){
 
         User user = (User) session.getAttribute("loggedInUser");
 
@@ -29,7 +29,11 @@ public class UserController {
             return "redirect:/books";
         }
 
-        model.addAttribute("users", userService.findAll());
+        if (kw.equals("")) {
+            model.addAttribute("users", userService.findAll());
+        } else {
+            model.addAttribute("users", userService.searchUsers(kw));
+        }
 
         return "users";
     }

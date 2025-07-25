@@ -16,6 +16,10 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public List<Category> searchCates(String categoryName) {
+        return categoryRepository.findAllByNameContainingIgnoreCase(categoryName);
+    }
+
     public Optional<Category> findById(Long id) {
         return categoryRepository.findById(id);
     }

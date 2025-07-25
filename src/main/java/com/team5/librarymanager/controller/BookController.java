@@ -28,7 +28,7 @@ public class BookController {
         if (account == null) {
             return "redirect:/login";
         }
-         if (account.getRole().equals("admin")) {
+         if (account.getRole().equals("staff")) {
              if (kw.equals("")) {
                  model.addAttribute("books", bookService.findAll());
              } else {
@@ -78,6 +78,10 @@ public class BookController {
             return "redirect:/login";
         }
 
+        if (!user.getRole().equals("staff")) {
+            return "redirect:/books";
+        }
+
         model.addAttribute("book", new Book());
 
         model.addAttribute("cates", categoryService.findAll());
@@ -94,6 +98,11 @@ public class BookController {
         if(user == null){
             return "redirect:/login";
         }
+
+        if(!user.getRole().equals("staff")) {
+            return "redirect:/books";
+        }
+        
         Book book = bookService.findById(id).get();
 
         model.addAttribute("book", book);
@@ -113,7 +122,7 @@ public class BookController {
             return "redirect:/login";
         }
 
-        if (!acc.getRole().equals("admin")) {
+        if (!acc.getRole().equals("staff")) {
             return "redirect:/books";
         }
 

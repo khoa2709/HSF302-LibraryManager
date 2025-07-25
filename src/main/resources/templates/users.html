@@ -8,22 +8,22 @@
 <body>
     <h1>User Management</h1>
     <div th:if="${session.loggedInUser.getRole().equals('admin')}">
-        <a th:href="@{'/books'}">Manage Books</a>
-        <a th:href="@{'/categories'}">Manage Categories</a>
-        <a th:href="@{'/users'}">Manage Users</a>
-
-        <a th:href="@{'/report'}">Report</a>
+      <a th:href="@{'/books'}">Manage Books</a>
+      <a th:href="@{'/categories'}">Manage Categories</a>
+      <a th:href="@{'/users'}">Manage Users</a>
+      <a th:href="@{'/report'}">Report</a>
     </div>
     <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+        <a th:href="@{'/books'}">Manage Books</a>
+        <a th:href="@{'/categories'}">Manage Categories</a>
         <a th:href="@{'/loans'}">Manage Loans</a>
     </div>
 
-    <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
+    <div th:if="${!session.loggedInUser.getRole().equals('admin') && session.loggedInUser.getRole().equals('staff')}">
         You don't have permission to access this page!
     </div>
 
-    <div th:if="${session.loggedInUser.getRole().equals('admin')}">
-
+    <div th:if="${session.loggedInUser.getRole().equals('admin') || session.loggedInUser.getRole().equals('staff')}">
         <p>
         <form th:action="@{'/users'}" method="get">
             <label for="keyword">Keyword: </label>
