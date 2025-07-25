@@ -30,6 +30,10 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public List<User> findMembUsers() {
+        return userRepository.findAllByRoleAndStatus("member", true);
+    }
+
     public List<User> searchUsers(String keyword) {
         return userRepository.findAllByFullNameContainingIgnoreCase(keyword);
     }

@@ -6,14 +6,15 @@
   <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
+  <div class="main-container">
   <h1>Category Management</h1>
-  <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+  <div th:if="${session.loggedInUser.getRole().equals('admin')}" class="link-group">
       <a th:href="@{'/books'}">Manage Books</a>
       <a th:href="@{'/categories'}">Manage Categories</a>
       <a th:href="@{'/users'}">Manage Users</a>
       <a th:href="@{'/report'}">Report</a>
   </div>
-  <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+  <div th:if="${session.loggedInUser.getRole().equals('staff')}" class="link-group">
       <a th:href="@{'/books'}">Manage Books</a>
       <a th:href="@{'/categories'}">Manage Categories</a>
       <a th:href="@{'/loans'}">Manage Loans</a>
@@ -22,14 +23,14 @@
   <div>
 
     <p>
-    <form th:action="@{'/categories'}" method="get">  
+    <form th:action="@{'/categories'}" method="get" class="search-form">  
       <label for="keyword">Keyword: </label>
       <input id="keyword" name="keyword" type="text" placeholder="Input category name">
       <button type="submit">Search</button>
     </form>
     </p>
 
-    <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+    <div th:if="${session.loggedInUser.getRole().equals('staff')}" class="page-links">
       <a th:href="@{/categories/add}">Add New Category</a>
     </div>
 
@@ -38,7 +39,7 @@
     </div>
     <table th:unless="${cates.isEmpty()}">
       <thead>
-      <tr>
+      <tr class="card">
         <th>Name</th>
         <th>Description</th>
         <th th:if="${session.loggedInUser.getRole().equals('staff')}">Status</th>
@@ -46,7 +47,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="x : ${cates}">
+      <tr th:each="x : ${cates}" class="card">
         <td th:text="${x.getName()}">...</td>
         <td th:text="${x.getDescription()}">...</td>
         <td th:if="${session.loggedInUser.getRole().equals('staff')}">
@@ -62,12 +63,12 @@
       </tr>
       </tbody>
     </table>
-    <p>
-      <a th:href="@{'/logout'}">Log out</a>
+    <p class="page-links">
+        <a th:href="@{'/logout'}">Log out</a>
     </p>
   </div>
 
-
+</div>
 
 </body>
 </html>

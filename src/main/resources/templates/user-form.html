@@ -33,6 +33,11 @@
             </div>
 
             <div>
+                <label for="email">Email:</label>
+                <input type="text" id="email" th:field="*{email}"/>
+            </div>
+
+            <div>
                 <label for="role">Role:</label>
                 <select id="role" th:field="*{role}">
                     <option value="staff">Staff</option>
@@ -48,7 +53,7 @@
             </select>
           </div>
 
-          <div>
+          <div class="link-group">
             <button type="submit" th:text="${formMode == 'edit'} ? 'Update' : 'Create'">Submit</button>
             <a href="/users" th:text="${formMode == 'edit'} ? 'Cancel' : 'Cancel'">Cancel</a>
           </div>

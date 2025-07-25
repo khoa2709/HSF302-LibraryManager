@@ -6,33 +6,34 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
+    <div class="main-container">
     <h1>User Management</h1>
-    <div th:if="${session.loggedInUser.getRole().equals('admin')}">
-      <a th:href="@{'/books'}">Manage Books</a>
-      <a th:href="@{'/categories'}">Manage Categories</a>
-      <a th:href="@{'/users'}">Manage Users</a>
-      <a th:href="@{'/report'}">Report</a>
+    <div th:if="${session.loggedInUser.getRole().equals('admin')}" class="link-group">
+        <a th:href="@{'/books'}">Manage Books</a>
+        <a th:href="@{'/categories'}">Manage Categories</a>
+        <a th:href="@{'/users'}">Manage Users</a>
+        <a th:href="@{'/report'}">Report</a>
     </div>
-    <div th:if="${session.loggedInUser.getRole().equals('staff')}">
+    <div th:if="${session.loggedInUser.getRole().equals('staff')}" class="link-group">
         <a th:href="@{'/books'}">Manage Books</a>
         <a th:href="@{'/categories'}">Manage Categories</a>
         <a th:href="@{'/loans'}">Manage Loans</a>
     </div>
 
-    <div th:if="${!session.loggedInUser.getRole().equals('admin') && session.loggedInUser.getRole().equals('staff')}">
+    <div th:if="${!session.loggedInUser.getRole().equals('admin')}">
         You don't have permission to access this page!
     </div>
 
     <div th:if="${session.loggedInUser.getRole().equals('admin') || session.loggedInUser.getRole().equals('staff')}">
         <p>
-        <form th:action="@{'/users'}" method="get">
+        <form th:action="@{'/users'}" method="get" class="search-form">
             <label for="keyword">Keyword: </label>
-            <input id="keyword" name="keyword" type="text" placeholder="Input name of user">
+            <input id="keyword" name="keyword" type="text" placeholder="Input fullname of user">
             <button type="submit">Search</button>
         </form>
         </p>
 
-        <div>
+        <div th:if="${session.loggedInUser.getRole().equals('admin')}" class="page-links">
             <a th:href="@{/users/add}">Add New User</a>
         </div>
 
@@ -41,7 +42,7 @@
         </div>
         <table th:unless="${users.isEmpty()}">
             <thead>
-            <tr>
+            <tr class="card">
                 <th>Fullname</th>
                 <th>Username</th>
                 <th>Password</th>
@@ -52,7 +53,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="x : ${users}">
+            <tr th:each="x : ${users}" class="card">
                 <td th:text="${x.getFullName()}">...</td>
                 <td th:text="${x.getUsername()}">...</td>
                 <td th:text="${x.getPassword()}">...</td>
@@ -71,10 +72,10 @@
             </tr>
             </tbody>
         </table>
-        <p>
+        <p class="page-links">
             <a th:href="@{'/logout'}">Log out</a>
         </p>
     </div>
-
+</div>  
 </body>
 </html>

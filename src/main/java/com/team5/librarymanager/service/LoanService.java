@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,54 +91,40 @@ public class LoanService {
     public Long countByBookId(Long bookId) {
         return loanRepository.countByBookId(bookId);
     }
-@Transactional
-public void borrowBookAsStaff(Long bookId, LocalDate dueDate, String borrowerName) {
-    Book book = bookService.findById(bookId)
-            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sách"));
 
-    if (!book.isStatus() || book.getQuantity() <= 0) {
-        throw new IllegalStateException("Sách không khả dụng để mượn");
+    @Transactional
+    public void borrowBookAsStaff(Long bookId, LocalDate dueDate, String borrowerName) {
+        Book book = bookService.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sách"));
+
+        if (!book.isStatus() || book.getQuantity() <= 0) {
+            throw new IllegalStateException("Sách không khả dụng để mượn");
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalDate maxDueDate = today.plusDays(30);
+
+        if (dueDate.isBefore(today) || dueDate.isAfter(maxDueDate)) {
+            throw new IllegalStateException("Ngày trả không hợp lệ (tối đa 30 ngày)");
+        }
+
+        // Kiểm tra người mượn
+        User borrower = userRepository.findByUsername(borrowerName);
+
+        // Tạo phiếu mượn mới
+        Loan loan = new Loan();
+        loan.setUser(borrower);
+        loan.setBook(book);
+        loan.setLoanDate(today);
+        loan.setDueDate(dueDate);
+        loan.setStatus(LoanStatus.BORROWED);
+
+        loanRepository.save(loan);
+
+        // Giảm số lượng sách
+        book.setQuantity(book.getQuantity() - 1);
+        bookRepository.save(book);
     }
-
-    LocalDate today = LocalDate.now();
-    LocalDate maxDueDate = today.plusDays(30);
-
-    if (dueDate.isBefore(today) || dueDate.isAfter(maxDueDate)) {
-        throw new IllegalStateException("Ngày trả không hợp lệ (tối đa 30 ngày)");
-    }
-
-    // Sinh username từ tên người mượn, loại bỏ khoảng trắng và chuyển về thường
-    String baseUsername = borrowerName.trim().replaceAll("\\s+", "").toLowerCase();
-    String username = baseUsername;
-    int suffix = 1;
-    while (userRepository.findByUsername(username) != null) {
-        username = baseUsername + suffix;
-        suffix++;
-    }
-
-    // Tạo user mới
-    User borrower = new User();
-    borrower.setFullName(borrowerName);
-    borrower.setUsername(username);
-    borrower.setPassword("123");
-    borrower.setRole("member");
-    borrower.setStatus(true);
-    userRepository.save(borrower);
-
-    // Tạo phiếu mượn mới
-    Loan loan = new Loan();
-    loan.setUser(borrower);
-    loan.setBook(book);
-    loan.setLoanDate(today);
-    loan.setDueDate(dueDate);
-    loan.setStatus(LoanStatus.BORROWED);
-
-    loanRepository.save(loan);
-
-    // Giảm số lượng sách
-    book.setQuantity(book.getQuantity() - 1);
-    bookRepository.save(book);
-}
 
    //Trả sách
     @Transactional
@@ -153,8 +140,14 @@ public void borrowBookAsStaff(Long bookId, LocalDate dueDate, String borrowerNam
         loanRepository.save(loan);
     }
 
-    private boolean isBookAvailable(Book book) {
-        return book.isStatus() && book.getQuantity() > 0;
+    public List<Loan> searchLoans(String fullName) {
+        List<User> users = userRepository.findAllByFullNameContainingIgnoreCase(fullName);
+        List<Loan> loans = new ArrayList<>();
+        for (User user : users) {
+            loans.addAll(loanRepository.findByUserId(user.getId()));
+        }
+        return loans;
     }
+
     
 }

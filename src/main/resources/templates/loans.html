@@ -6,23 +6,28 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
+    <div class="main-container">
     <h1>Manage Loans</h1>
-    <div th:if="${session.loggedInUser.getRole().equals('staff')}">
-      <a th:href="@{'/books'}">Manage Books</a>
-      <a th:href="@{'/categories'}">Manage Categories</a>
-      <a th:href="@{'/loans'}">Manage Loans</a>
-  </div>
+    <div th:if="${session.loggedInUser.getRole().equals('staff')}" class="link-group">
+        <a th:href="@{'/books'}">Manage Books</a>
+        <a th:href="@{'/categories'}">Manage Categories</a>
+        <a th:href="@{'/loans'}">Manage Loans</a>
+    </div>
 
     <div th:if="${success}" th:text="${success}"></div>
     <div th:if="${error}" style="color: red" th:text="${error}"></div>
 
-    <div th:if="${loans.isEmpty()}">
-        <p> You don't have permission to access this page!</p>
-    </div>
+    <p>
+        <form th:action="@{'/loans'}" method="get" class="search-form">
+            <label for="keyword">Keyword: </label>
+            <input id="keyword" name="keyword" type="text" placeholder="Input name of user">
+            <button type="submit">Search</button>
+        </form>
+    </p>
 
     <table th:unless="${loans.isEmpty()}">
         <thead>
-            <tr>
+            <tr class="card">
                 <th>Book Title</th>
                 <th>Borrower Name</th>
                 <th>Loan Date</th>
@@ -33,7 +38,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="loan : ${loans}">
+            <tr th:each="loan : ${loans}" class="card">
                 <td th:text="${loan.getBook().getTitle()}">...</td>
                 <td th:text="${loan.getUser().getFullName()}">...</td>
                 <td th:text="${#temporals.format(loan.getLoanDate(), 'MM/dd/yyyy')}">...</td>
@@ -52,9 +57,9 @@
         </tbody>
     </table>
 
-    <p>
-        
+    <p class="page-links">
         <a th:href="@{'/books'}">Back</a>
     </p>
+    </div>
 </body>
 </html> 

@@ -17,11 +17,11 @@ public class DataInitializer {
     CommandLineRunner initData(UserService userService, CategoryService categoryService, BookService bookService, LoanService loanService) {
         return args -> {
             // 1. Users
-                User nttv = new User("Nguyễn Thị Tường Vy", "admin", "123", "admin", true);
-                User ndk = new User("Nguyễn Đăng Khoa", "staff", "123", "staff", true);
-                User nlv = new User("Nguyễn Ly Vi", "member1", "123", "member", true);
-                User nht = new User("Nguyễn Hữu Thành", "member2", "123", "member", true);
-                User nch = new User("Nguyễn Công Hậu", "member3", "123", "member", true);
+                User nttv = new User("Nguyễn Thị Tường Vy", "admin", "123", "nttv@example.com", "admin", true);
+                User ndk = new User("Nguyễn Đăng Khoa", "staff", "123", "ndk@example.com", "staff", true);
+                User nlv = new User("Nguyễn Ly Vi", "member1", "123", "vynguyen03012203@gmail.com", "member", true);
+                User nht = new User("Nguyễn Hữu Thành", "member2", "123", "nht@example.com", "member", true);
+                User nch = new User("Nguyễn Công Hậu", "member3", "123", "nch@example.com", "member", true);
                 userService.saveAll(Arrays.asList(nttv,ndk,nlv,nht,nch));
 
             // 2. Categories
@@ -52,7 +52,7 @@ public class DataInitializer {
                 loanService.saveAll(Arrays.asList(
                     new Loan(nlv, b1, LocalDate.of(2025,7,1), LocalDate.of(2025,7,10), LocalDate.of(2025,7,9), LoanStatus.RETURNED),
                     new Loan(nlv, b3, LocalDate.of(2025,7,2), LocalDate.of(2025,7,12), LocalDate.of(2025,7,11), LoanStatus.RETURNED),
-                    new Loan(nht, b2, LocalDate.of(2025,7,10), LocalDate.of(2025,7,17), null, LoanStatus.BORROWED),
+                    new Loan(nht, b2, LocalDate.of(2025,7,10), LocalDate.of(2025,7,27), null, LoanStatus.BORROWED),
                     new Loan(nch, b5, LocalDate.of(2025,6,25), LocalDate.of(2025,7,5), null, LoanStatus.OVERDUE)
                 ));
 

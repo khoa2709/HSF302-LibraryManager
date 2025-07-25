@@ -2,9 +2,9 @@ package com.team5.librarymanager.repository;
 
 import com.team5.librarymanager.entity.Loan;
 import com.team5.librarymanager.entity.LoanStatus;
+import com.team5.librarymanager.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import java.time.LocalDate;
 import java.util.List;
 
 public interface LoanRepository extends JpaRepository<Loan, Long> {
@@ -16,4 +16,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     @Query("SELECT COUNT(l) FROM Loan l WHERE l.status = 'BORROWED' AND l.dueDate < CURRENT_DATE")
     Long countOverdueLoans();
     Long countByBookId(Long bookId);
-} 
+
+    List<Loan> findAllByUser(User user);
+}

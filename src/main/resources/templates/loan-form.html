@@ -35,24 +35,60 @@
         </div>
         <div>
             <label for="borrowerName">Borrower Name:</label>
-            <input type="text" id="borrowerName" name="borrowerName" required>
+            <select id="borrowerName" name="borrowerName" required onchange="toggleNewUserForm()">
+                <option th:each="user : ${users}" 
+                        th:value="${user.username}" 
+                        th:text="${user.fullName}"></option>
+                <option value="new">Thêm người dùng mới</option>
+            </select>
+        </div>
+
+        <div id="newUserForm" style="display:none; margin-top:10px;">
+            <label for="newFullName">Full Name:</label>
+            <input type="text" id="newFullName" name="newFullName" />
+
+            <label for="newUsername">Username:</label>
+            <input type="text" id="newUsername" name="newUsername" />
+            
+            <label for="newEmail">Email:</label>
+            <input type="email" id="newEmail" name="newEmail" />
         </div>
 
         <div>
             <label>Loan Date:</label>
-            <span th:text="${#temporals.format(today, 'MM/dd/yyyy')}"></span>
+            <span th:text="${#temporals.format(today, 'dd/MM/yyyy')}"></span>
         </div>
 
         <div>
             <label for="dueDate">Due Date:</label>
             <input type="date" id="dueDate" name="dueDate" required
-                   th:min="${#temporals.format(today, 'yyyy-MM-dd')}"
-                   th:max="${#temporals.format(maxDueDate, 'yyyy-MM-dd')}">
+                   th:min="${#temporals.format(today, 'dd-MM-yyyy')}"
+                   th:max="${#temporals.format(maxDueDate, 'dd-MM-yyyy')}">
             <span>(Maximum 30 days)</span>
         </div>
 
-        <button type="submit">Confirm Borrow</button>
-        <a th:href="@{/books}">Cancel</a>
+        <div class="link-group">
+            <button type="submit">Confirm Loan</button>
+            <a th:href="@{/books}">Cancel</a>
+        </div>
     </form>
+</body>
+<script>
+function toggleNewUserForm() {
+    var select = document.getElementById('borrowerName');
+    var form = document.getElementById('newUserForm');
+    if (select.value === 'new') {
+        form.style.display = 'block';
+        document.getElementById('newFullName').required = true;
+        document.getElementById('newUsername').required = true;
+        document.getElementById('newEmail').required = true;
+    } else {
+        form.style.display = 'none';
+        document.getElementById('newFullName').required = false;
+        document.getElementById('newUsername').required = false;
+        document.getElementById('newEmail').required = false;
+    }
+}
+</script>
 </body>
 </html> 

@@ -5,12 +5,13 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
+    <div class="main-container">
     <h1>Statistics</h1>
-    <div th:if="${session.loggedInUser.getRole().equals('admin')}">
+    <div th:if="${session.loggedInUser.getRole().equals('admin')}" class="link-group">
         <a th:href="@{'/books'}">Manage Books</a>
         <a th:href="@{'/categories'}">Manage Categories</a>
         <a th:href="@{'/users'}">Manage Users</a>
-        <a th:href="@{'/loans'}">Manage Loans</a>
+        <a th:href="@{'/report'}">Report</a>
     </div>
     <table>
         <tr>
@@ -68,6 +69,8 @@
             <td th:text="${catesInactive}">0</td>
         </tr>
     </table>
-    <a href="/books">Back</a>
+    <div class="page-links">
+        <a href="/books" >Back</a>
+    </div>
 </body>
 </html>

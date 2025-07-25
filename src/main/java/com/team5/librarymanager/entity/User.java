@@ -22,6 +22,9 @@ public class User {
     @Column(name = "Password", nullable = false)
     private String password;
 
+    @Column(name = "Email", nullable = false, unique = true)
+    private String email;
+
     @Column(name = "Role", nullable = false)
     private String role;
 
@@ -37,10 +40,11 @@ public class User {
     // Getters, setters, constructors
     public User() {}
 
-    public User(String fullName, String username, String password, String role, boolean status) {
+    public User(String fullName, String username, String password, String email, String role, boolean status) {
         this.fullName = fullName;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.role = role;
         this.status = status;
         this.createdAt = LocalDateTime.now();
@@ -65,5 +69,13 @@ public class User {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

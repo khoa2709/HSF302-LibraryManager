@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<div>
+<div class="main-container">
     <div>
         <div>
             <h1 th:text="${formMode == 'edit'} ? 'Edit Book' : 'Add New Book'">Edit Book | Add New Book</h1>
@@ -70,7 +70,7 @@
                     </select>
                 </div>
 
-                <div>
+                <div class="link-group">
                     <button type="submit">Save</button>
                     <a th:href="@{/books}">Cancel</a>
                 </div>

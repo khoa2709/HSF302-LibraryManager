@@ -7,6 +7,7 @@ import com.team5.librarymanager.entity.User;
 import com.team5.librarymanager.service.BookService;
 import com.team5.librarymanager.service.LoanService;
 import com.team5.librarymanager.service.UserService;
+import com.team5.librarymanager.service.EmailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class LoanController {
     @Autowired
     private UserService userService; 
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/history")
     public String viewLoanHistory(Model model, Principal principal) {
     User user = userService.findByUsername(principal.getName());
@@ -45,7 +49,7 @@ public class LoanController {
 }
 
     @GetMapping("")
-    public String showLoans(Model model, HttpSession session) {
+    public String showLoans(@RequestParam(value = "keyword", required = false, defaultValue = "") String kw, Model model, HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) {
             return "redirect:/login";
@@ -53,10 +57,15 @@ public class LoanController {
 
         // staff xem tất cả các phiếu mượn
         if (user.getRole().equals("staff")) {
-            model.addAttribute("loans", loanService.findAll());
+            if (kw.equals("")) {
+                model.addAttribute("loans", loanService.findAll());
+            } else {
+                model.addAttribute("loans", loanService.searchLoans(kw));
+            }
         } else {
-            // User thường chỉ xem phiếu mượn của mình
+            // User chỉ xem phiếu mượn của mình
             model.addAttribute("loans", loanService.getLoansByUser(user.getId()));
+            
         }
         
         return "loans";
@@ -80,6 +89,7 @@ public class LoanController {
             LocalDate today = LocalDate.now();
             LocalDate maxDueDate = today.plusDays(30); // Cho phép mượn tối đa 30 ngày
 
+            model.addAttribute("users", userService.findMembUsers());
             model.addAttribute("book", book);
             model.addAttribute("today", today);
             model.addAttribute("maxDueDate", maxDueDate);
@@ -92,23 +102,57 @@ public class LoanController {
     }
 
     @PostMapping("/borrow")
-    public String processBorrowBook(@RequestParam Long bookId, 
-                                  @RequestParam LocalDate dueDate,
-                                  HttpSession session, 
-                                  @RequestParam String borrowerName,
-                                  RedirectAttributes redirectAttributes) {
+    public String processBorrowBook(@RequestParam Long bookId,
+                                    @RequestParam LocalDate dueDate,
+                                    HttpSession session,
+                                    @RequestParam String borrowerName,
+                                    @RequestParam(required = false) String newFullName,
+                                    @RequestParam(required = false) String newUsername,
+                                    @RequestParam(required = false) String newEmail,
+                                    RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) {
             return "redirect:/login";
         }
 
         try {
-        loanService.borrowBookAsStaff(bookId, dueDate, borrowerName);
-        redirectAttributes.addFlashAttribute("success", "Mượn sách thành công!");
-    } catch (IllegalStateException | IllegalArgumentException e) {
-        redirectAttributes.addFlashAttribute("error", e.getMessage());
-    }
-
+            String actualBorrower = borrowerName;
+            // Nếu chọn thêm người dùng mới
+            if ("new".equals(borrowerName)) {
+                // Kiểm tra thông tin hợp lệ
+                if (newFullName == null || newFullName.isBlank() || newUsername == null || newUsername.isBlank() || newEmail == null || newEmail.isBlank()) {
+                    redirectAttributes.addFlashAttribute("error", "Vui lòng nhập đầy đủ thông tin người dùng mới!");
+                    return "redirect:/loans/borrow/" + bookId;
+                }
+                // Kiểm tra username đã tồn tại chưa
+                if (userService.findByUsername(newUsername) != null) {
+                    redirectAttributes.addFlashAttribute("error", "Username đã tồn tại!");
+                    return "redirect:/loans/borrow/" + bookId;
+                }
+                // Tạo user mới
+                User newUser = new User();
+                newUser.setFullName(newFullName);
+                newUser.setUsername(newUsername);
+                newUser.setEmail(newEmail);
+                newUser.setPassword("123");
+                newUser.setRole("member");
+                newUser.setStatus(true);
+                userService.save(newUser);
+                actualBorrower = newUsername;
+            }
+            loanService.borrowBookAsStaff(bookId, dueDate, actualBorrower);
+            // Gửi mail cho user có sẵn
+            if (!"new".equals(borrowerName)) {
+                User borrower = userService.findByUsername(actualBorrower);
+                Book book = bookService.findById(bookId).orElse(null);
+                if (borrower != null && book != null && borrower.getEmail() != null && !borrower.getEmail().isBlank()) {
+                    emailService.sendLoanCompletionMail(borrower.getEmail(), book.getTitle(), dueDate);
+                }
+            }
+            redirectAttributes.addFlashAttribute("success", "Mượn sách thành công!");
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/loans";
     }
 
