@@ -17,9 +17,9 @@ public class LoanReminderScheduler {
     @Autowired
     private EmailService emailService;
 
-    // Chạy lúc 7h sáng mỗi ngày
-    @Scheduled(cron = "0 0 7 * * *")
-    public void sendReturnReminders() {
+    // Chạy lúc 8h sáng mỗi ngày
+    @Scheduled(cron = "0 0 8 * * *")
+    public void sendRetunReminders() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<Loan> loans = loanRepository.findByStatus(LoanStatus.BORROWED);
         for (Loan loan : loans) {

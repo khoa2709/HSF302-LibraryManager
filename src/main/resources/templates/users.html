@@ -46,6 +46,7 @@
                 <th>Fullname</th>
                 <th>Username</th>
                 <th>Password</th>
+                <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
                 <th>Created Date</th>
@@ -57,6 +58,7 @@
                 <td th:text="${x.getFullName()}">...</td>
                 <td th:text="${x.getUsername()}">...</td>
                 <td th:text="${x.getPassword()}">...</td>
+                <td th:text="${x.getEmail()}">...</td>
                 <td th:text="${x.getRole()}">...</td>
                 <td>
                     <span th:if="${x.isStatus()}">Active</span>
